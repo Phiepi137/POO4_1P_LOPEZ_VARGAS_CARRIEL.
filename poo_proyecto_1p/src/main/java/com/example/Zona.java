@@ -36,9 +36,14 @@ public class Zona{
 
     // metodos
     public boolean disponibilidad(String zona, int cantidad){
-        return false;
+        if(zona != null){
+            return false;
+        }
+        return zona.equalsIgnoreCase(tipo.getNombre()&& cantidad<= disponibilidad);
     }
     public void actualizarZona(String zona, int cantidad){
-        // ...
+        disponibilidad-=cantidad;
+        System.out.println("Asientos disponibles en la zona "+ zona+ ": "+ disponibilidad);
+        
     }
 }
