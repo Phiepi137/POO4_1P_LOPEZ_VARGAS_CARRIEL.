@@ -35,8 +35,9 @@ public RolUsuario getRol(){
     return rol;
 }
 // Metodos
-public void conslEntradas(){
-    
+public abstract void conslEntradas();
 
-}
+
+
+
 }

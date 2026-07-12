@@ -16,7 +16,19 @@ public class Aficionado extends Usuario{
     }
 
     // Metodos
-    public void conslMisEntradas(){
+    @Override
+    public void conslMisEntradas(ArrayList<Compra> compras){}){
+        String tieneCompras= false;
+        for(Compra c: compras){
+            if(c.getCodigoUnico().equals(this.codigoUnico()){
+                System.out.println(c)
+                tieneCompras=true;
+            }
+        }
+        ig(tieneCompras){
+            System.out.println("No tiene compras realizadas.")
+        }
+
 
     }
      
