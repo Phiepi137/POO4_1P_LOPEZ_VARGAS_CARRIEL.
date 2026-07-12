@@ -86,10 +86,9 @@ public class Partido{
     public void setZonas(ArrayList<Zona> zonas){
         this.zonas = zonas;
     }
-
     // Metodos
     public void mostrarInformacion(){
-        // ...
+        System.out.println("Partido: "+seleccionLocal+"vs"+seleccionVisitante+"\nCodigo: ");
     }
-
+    
 }

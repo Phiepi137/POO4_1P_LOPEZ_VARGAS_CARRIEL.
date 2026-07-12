@@ -43,7 +43,8 @@ public class Sistema {
                 case 2:
                     break;
                 case 3:
-                    crearCompra();
+                    Aficionado e=(Aficionado)usuario;
+                    crearCompra(e);
                     break;
                 case 4:
                     System.out.println("Cerrando sistema...");
@@ -73,6 +74,7 @@ public class Sistema {
         }
         return false;
     }
+    // Sobrecarga de metodos
     public void mostrarPartidos(){
         for(Partido p:partidos){
             p.mostrarInformacion();
@@ -83,9 +85,13 @@ public class Sistema {
             p.mostrarInformacion();
         }
     }
+    //
+
     public void mostrarPrecio(Compra compra){
         System.out.println("Valor a pagar: $"+compra.getValorPagado());
     }
+
+    // Buscar
     public Partido buscarPartido(String codigo){
         for(Partido p:partidos){
             if(p.getCodigoPartido().equals(codigo)){
@@ -94,6 +100,26 @@ public class Sistema {
         }
         return null;
     }
+    public Kit buscarKit(String codigo){
+        for(Kit k:Kit){
+            if(k.getCodigoKit().equals(codigo)){
+                return k;
+            }
+        }
+        return null;
+    }
+    //
+    // Sobrecarga de metodos
+    public void notificar(Aficionado aficionado, Compra compra){
+        System.out.println(aficionado+"ha hecho una compra!");
+    }
+    public void notificar(Kit kit, Aficionado aficionado, Compra compra){
+        System.out.println(aficionado+"ha comprado el kit "+kit.getNombre());
+    }
+    public void notificar(Organizador organizador, String reporte){
+        System.out.println("...");
+    }
+    // 
     public void crearCompra(Aficionado a){
         System.out.println("1. Comprar entrada\n2. Comprar kit");
         int opcion=sc.nextInt();
@@ -163,6 +189,7 @@ public class Sistema {
                 // Descontar entradas disponibles
                     z.setDisponible(z.getDisponible()-cantidad);
                     mostrarPrecio(compra);
+                    notificar(a, compra);
                     System.out.println("Compra realizada exitosamente.");
                 }
 
@@ -173,66 +200,47 @@ public class Sistema {
 
             case 2:
                 mostrarKitDisp();
-                Kit kit = null;
-                while (kit == null) {
+                Kit kit=null;
+                while (kit==null) {
+                    System.out.print("Ingrese el código del kit: ");
+                    String codigoKit=sc.nextLine();
+                    kit=buscarKit(codigoKit);
+                    if(kit==null) {
+                        System.out.println("Código incorrecto. Intente nuevamente.");
+                    }
+                }
+                if(kit.getDisponible()==0){
+                    System.out.println("Lo sentimos, el kit está agotado.");
+                    break;
+                }
 
-        System.out.print("Ingrese el código del kit: ");
-        String codigoKit = sc.nextLine();
+                int cantidadKit;
+                while(true){
+                    System.out.print("Cantidad de Kit: ");
+                    cantidadKit=sc.nextInt();
+                    sc.nextLine();
+                    if(cantidadKit<=0) {
+                        System.out.println("La cantidad debe ser mayor que cero.");
+                    }else if(cantidadKit>kit.getDisponible()){
+                        System.out.println("Solo quedan " + kit.getDisponible() + " Kit disponibles.");
+                    }
+                    else{
+                        break;
+                    }
+                }
 
-        kit = buscarKit(codigoKit);
-
-        if (kit == null) {
-            System.out.println("Código incorrecto. Intente nuevamente.");
-        }
-    }
-
-    if (kit.getDisponible() == 0) {
-        System.out.println("Lo sentimos, el kit está agotado.");
-        break;
-    }
-
-    int cantidadKit;
-
-    while (true) {
-
-        System.out.print("Cantidad de Kit: ");
-        cantidadKit = sc.nextInt();
-        sc.nextLine();
-
-        if (cantidadKit <= 0) {
-            System.out.println("La cantidad debe ser mayor que cero.");
-        }
-        else if (cantidadKit > kit.getDisponible()) {
-            System.out.println("Solo quedan " + kit.getDisponible() + " Kit disponibles.");
-        }
-        else {
-            break;
-        }
-    }
-
-    System.out.print("Ingrese el número de tarjeta: ");
-    String tarjetaKit = sc.nextLine();
-
-    Compra compraKit = a.comprEntradas(
-            kit.getCodigo(),
-            cantidadKit,
-            tarjetaKit);
-
-    if (compraKit != null) {
-
-        compras.add(compraKit);
-
-        // Actualizar disponibilidad
-        kit.setDisponible(kit.getDisponible() - cantidadKit);
-
-        mostrarPrecio(compraKit);
-
-        notificar(a, compraKit);
-
-        System.out.println("Compra realizada exitosamente.");
-    }
-
-    break;
+                System.out.print("Ingrese el número de tarjeta: ");
+                String tarjetaKit=sc.nextLine();
+                Compra compraKit = a.comprEntradas(kit.getCodigoKit(),cantidadKit,tarjetaKit);
+                if(compraKit!=null){
+                    compras.add(compraKit);
+                    kit.setDisponible(kit.getDisponible()-cantidadKit);
+                    mostrarPrecio(compraKit);
+                    notificar(kit, a, compraKit);
+                    System.out.println("Compra realizada exitosamente.");
+                }
+                break;
+            
             default:
             System.out.println("Opcion incorrecta");
         }
