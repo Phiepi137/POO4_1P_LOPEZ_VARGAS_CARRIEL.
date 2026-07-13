@@ -172,7 +172,7 @@ public class Sistema {
     }
 
     //
-    // Sobrecarga de metodos
+    // Sobrecarga de metodos notificar
     public void notificar(Aficionado aficionado, Compra compra) {
         System.out.println("\n===== NOTIFICACIÓN =====");
         System.out.println("Para: " + aficionado.getCorreo());
