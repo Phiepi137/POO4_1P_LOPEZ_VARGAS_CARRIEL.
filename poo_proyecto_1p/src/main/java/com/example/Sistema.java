@@ -4,11 +4,19 @@ import java.util.Scanner;
 import com.example.enums.TipoZona;
 
 public class Sistema {
-    public ArrayList<Usuario> usuarios;
-    public ArrayList<Partido> partidos;
-    public ArrayList<Kit> Kit;
-    public ArrayList<Compra> compras;
-    public Scanner sc=new Scanner(System.in);
+    private ArrayList<Usuario> usuarios;
+    private ArrayList<Partido> partidos;
+    private ArrayList<Kit> kits;
+    private ArrayList<Compra> compras;
+    private Scanner sc;
+
+    public Sistema() {
+        usuarios = new ArrayList<>();
+        partidos = new ArrayList<>();
+        kits = new ArrayList<>();
+        compras = new ArrayList<>();
+        sc = new Scanner(System.in);
+    }
 
     public void iniciarSesion(){
         System.out.print("Usuario: ");
@@ -16,45 +24,62 @@ public class Sistema {
         System.out.println("Contraseña: ");
         String pw=sc.nextLine();
         Usuario u=autenticar(us, pw);
-            if (u!=null){
-                System.out.println("Bienvenido!!"+u.getUsuario());
+        if (u!=null){
+            if (verificarIdentidad(u)){
+                System.out.println("Bienvenido, " + u.getNombreCompleto() + ".");
                 mostrarMenu(u);
-            }else{
-                System.out.println("Usuario o contraseña incorrectos.");
+            } else {
+                System.out.println("No se pudo verificar la identidad del usuario.");
             }
+        }else{
+            System.out.println("Usuario o contraseña incorrectos.");
+        }
     }
     public Usuario autenticar(String usuario, String contraseña){
         for(Usuario e: usuarios){
-            if(e.getUsuario().equals(usuario) && (e.getContraseña().equals(contraseña))) {
+            if(e.autenticar(usuario, contraseña)) {
                 return e;
             }
         }
         return null;
     }
 
-    //verificar usuario
-   public boolean verificarIdentidad(Usuario usuario){
-    if(usuario.getNombre().equals(usuario.getNombre()) && usuario.getContraseña().equals(usuario.getContraseña())){
+    public boolean verificarIdentidad(Usuario usuario){
+        if (usuario instanceof Aficionado){
+            Aficionado a = (Aficionado) usuario;
+            System.out.println("Celular: " + a.getCelular());
+            return true;
+        }
         return true;
     }
-    return false;
-   }
 
     public void mostrarMenu(Usuario usuario){
         if(usuario instanceof Aficionado){
-            System.out.println("1. Consultar partidos\n2. Consultar mis entradas\n3. Comprar entradas\n4. Salir");
-            int opcion=sc.nextInt();
-            switch(opcion){
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    Aficionado e=(Aficionado)usuario;
-                    crearCompra(e);
-                    break;
-                case 4:
-                    System.out.println("Cerrando sistema...");
+            boolean salir = false;
+            Aficionado e = (Aficionado) usuario;
+
+            while(!salir){
+                System.out.println("\n1. Consultar partidos\n2. Consultar mis entradas\n3. Comprar entradas\n4. Salir");
+                int opcion = sc.nextInt();
+                sc.nextLine();
+
+                switch(opcion){
+                    case 1:
+                        mostrarPartidos();
+                        break;
+                    case 2:
+                        e.consultarEntradas(compras);
+                        break;
+                    case 3:
+                        crearCompra(e);
+                        break;
+                    case 4:
+                        System.out.println("Cerrando sistema...");
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Opción incorrecta. Intente nuevamente.");
+                }
             }
         }else{
             System.out.println("1. Consultar reportes\n2. Consultar entradas");
@@ -62,24 +87,11 @@ public class Sistema {
 
     }
     public void mostrarKitDisp(){
-        for(Kit k:Kit){
+        for(Kit k : kits){
             if(k.disponibilidad()){
                 System.out.println(k);
             }
         }
-    }
-    public boolean validarDisp(String codigo){
-        for(Kit k:Kit){
-            if(k.getCodigoKit().equals(codigo) && k.disponibilidad()){
-                return true;
-            }
-        }
-        for(Partido p:partidos){
-            if(p.getCodigoPartido().equals(codigo) && p.getCapacidad()>0){
-                return true;
-            }
-        }
-        return false;
     }
     // Sobrecarga de metodos
     public void mostrarPartidos(){
@@ -108,7 +120,7 @@ public class Sistema {
         return null;
     }
     public Kit buscarKit(String codigo){
-        for(Kit k:Kit){
+        for(Kit k : kits){
             if(k.getCodigoKit().equals(codigo)){
                 return k;
             }
@@ -118,10 +130,10 @@ public class Sistema {
     //
     // Sobrecarga de metodos
     public void notificar(Aficionado aficionado, Compra compra){
-        System.out.println(aficionado+"ha hecho una compra!");
+        System.out.println(aficionado.getNombreCompleto() + " ha hecho una compra!");
     }
     public void notificar(Kit kit, Aficionado aficionado, Compra compra){
-        System.out.println(aficionado+"ha comprado el kit "+kit.getNombre());
+        System.out.println(aficionado.getNombreCompleto() + " ha comprado el kit " + kit.getNombre());
     }
     public void notificar(Organizador organizador, String reporte){
         System.out.println("...");
@@ -146,27 +158,28 @@ public class Sistema {
                     }
                 }
                 // Verificar si existe la zona
-                Zona z=null;
-                while(z==null){
-                    System.out.println("Escoja zona\n1. General\n2.Preferencia\n3. VIP");
-                    int zona=sc.nextInt();
+                Zona z = null;
+                while(z == null){
+                    System.out.println("Escoja zona\n1. General\n2. Preferencia\n3. VIP");
+                    int zona = sc.nextInt();
                     sc.nextLine();
-                    TipoZona tipo=null;
+                    TipoZona tipo = null;
                     switch(zona){
                         case 1:
-                            tipo=TipoZona.GENERAL;
+                            tipo = TipoZona.GENERAL;
                             break;
                         case 2:
-                            tipo=TipoZona.PREFERENCIA;
+                            tipo = TipoZona.PREFERENCIA;
                             break;
                         case 3:
-                            tipo=TipoZona.VIP;
+                            tipo = TipoZona.VIP;
                             break;
                         default:
                             System.out.println("Opcion invalida");
                             continue;
                     }
-                    if (z==null){
+                    z = p.buscarZona(tipo);
+                    if (z == null){
                         System.out.println("Esa zona no existe para este partido.");
                     }
                 }
@@ -190,7 +203,7 @@ public class Sistema {
                 }
                 System.out.print("Ingrese el número de tarjeta: ");
                 String tarjeta = sc.nextLine();
-                Compra compra = a.comprEntradas(p.getCodigoPartido(),z.getTipo(),cantidad,tarjeta);
+                Compra compra = a.comprarEntradas(p.getCodigoPartido(),z.getTipo(),cantidad,tarjeta);
                 if (compra != null) {
                     compras.add(compra);
                 // Descontar entradas disponibles
@@ -216,7 +229,7 @@ public class Sistema {
                         System.out.println("Código incorrecto. Intente nuevamente.");
                     }
                 }
-                if(kit.getDisponible()==0){
+                if(kit.getDisponibles()==0){
                     System.out.println("Lo sentimos, el kit está agotado.");
                     break;
                 }
@@ -228,8 +241,8 @@ public class Sistema {
                     sc.nextLine();
                     if(cantidadKit<=0) {
                         System.out.println("La cantidad debe ser mayor que cero.");
-                    }else if(cantidadKit>kit.getDisponible()){
-                        System.out.println("Solo quedan " + kit.getDisponible() + " Kit disponibles.");
+                    }else if(cantidadKit>kit.getDisponibles()){
+                        System.out.println("Solo quedan " + kit.getDisponibles() + " Kit disponibles.");
                     }
                     else{
                         break;
@@ -238,10 +251,10 @@ public class Sistema {
 
                 System.out.print("Ingrese el número de tarjeta: ");
                 String tarjetaKit=sc.nextLine();
-                Compra compraKit = a.comprEntradas(kit.getCodigoKit(),cantidadKit,tarjetaKit);
+                Compra compraKit = a.comprarEntradas(kit.getCodigoKit(),cantidadKit,tarjetaKit);
                 if(compraKit!=null){
                     compras.add(compraKit);
-                    kit.setDisponible(kit.getDisponible()-cantidadKit);
+                    kit.setDisponibles(kit.getDisponibles()-cantidadKit);
                     mostrarPrecio(compraKit);
                     notificar(kit, a, compraKit);
                     System.out.println("Compra realizada exitosamente.");
