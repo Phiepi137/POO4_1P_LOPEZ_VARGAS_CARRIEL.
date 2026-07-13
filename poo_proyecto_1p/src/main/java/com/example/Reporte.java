@@ -1,4 +1,6 @@
 package com.example;
+import com.example.enums.*;
+import java.util.ArrayList;
 
 public class Reporte{
     private int totalCompras;
@@ -39,7 +41,7 @@ public class Reporte{
             }else if(c.getTipo()==TipoCompra.KIT){
                 totalKits+=c.getCantidad();
             }
-            montoTotal+=c.getTotal();
+            montoTotal+=c.getValorPagado();
         }
         System.out.println("Reporte de compras:\nTotal de compras: "+ 
         totalCompras+ "\nTotal de entradas: "+

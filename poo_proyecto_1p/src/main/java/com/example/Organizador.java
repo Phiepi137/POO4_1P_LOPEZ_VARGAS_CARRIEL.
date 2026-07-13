@@ -1,30 +1,88 @@
 package com.example;
-public class Organizador{
+
+import java.util.ArrayList;
+
+import com.example.enums.RolUsuario;
+
+public class Organizador extends Usuario {
+
+    // #region Variables de Instancia
     private String empresaOrganizadora;
     private String cargo;
-    // Constructor
-    public Organizador(String empresaOrganizadora, String cargo){
-        this.empresaOrganizadora=empresaOrganizadora;
-        this.cargo=cargo;
+    //#endregion
+
+    // #region Constructor
+    public Organizador(String codigo,
+            String cedula,
+            String nombres,
+            String apellidos,
+            String usuario,
+            String contrasenia,
+            String correo,
+            RolUsuario rol,
+            String empresaOrganizadora,
+            String cargo) {
+
+        super(codigo, cedula, nombres, apellidos,
+                usuario, contrasenia, correo);
+
+        this.empresaOrganizadora = empresaOrganizadora;
+        this.cargo = cargo;
+
     }
-    // Getters
-    public String getEmpresaOrganizadora(){
+    // #endregion
+
+    // #region getters y setters
+    public String getEmpresaOrganizadora() {
         return empresaOrganizadora;
     }
-    public String getCargo(){
+
+    public void setEmpresaOrganizadora(String empresaOrganizadora) {
+        this.empresaOrganizadora = empresaOrganizadora;
+    }
+
+    public String getCargo() {
         return cargo;
     }
-    // Setters
-    public void setEmpresaOrganizadora(String empresaOrganizadora){
-        this.empresaOrganizadora=empresaOrganizadora;
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
-    public void setCargo(String cargo){
-        this.cargo=cargo;
-    }
-    // Metodos
+
+    // #endregion
+
+    // #region Metodos
     @Override
-    public void conslEntradas(){
-        System.out.println("El organizador "+cargo+" de la empresa "+empresaOrganizadora+" puede consultar las entradas vendidas.");
+    public void consultarEntradas(ArrayList<Compra> compras) {
+        System.out.println("El organizador " + cargo + " de la empresa " + empresaOrganizadora
+                + " puede consultar las entradas vendidas.");
+
+        System.out.println("\n========== TODAS LAS COMPRAS ==========");
+
+        if (compras.size() == 0) {
+
+            System.out.println("No existen compras registradas.");
+            return;
+
+        }
+
+        for (Compra compra : compras) {
+
+            System.out.println(compra);
+
+        }
+
     }
+
+    @Override
+    public String toString() {
+
+        return super.toString()
+                + "\nEmpresa Organizadora: " + empresaOrganizadora
+                + "\nCargo: " + cargo;
+
+    }
+
+    //#endregion
 
 }
