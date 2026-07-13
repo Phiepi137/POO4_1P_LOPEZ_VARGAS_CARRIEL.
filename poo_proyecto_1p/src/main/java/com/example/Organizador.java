@@ -28,6 +28,7 @@ public class Organizador extends Usuario {
 
         this.empresaOrganizadora = empresaOrganizadora;
         this.cargo = cargo;
+        this.rol = RolUsuario.O;
 
     }
     // #endregion

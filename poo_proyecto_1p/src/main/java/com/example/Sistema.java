@@ -19,6 +19,13 @@ public class Sistema {
         sc = new Scanner(System.in);
     }
 
+    // Leer Archivos
+    public void cargarDatos() {
+
+        usuarios = ManejoArchivos.leerUsuarios("archivos/usuarios.txt");
+
+    }
+
     public void iniciarSesion() {
         System.out.print("Usuario: ");
         String us = sc.nextLine();
