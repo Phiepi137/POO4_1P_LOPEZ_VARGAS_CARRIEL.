@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.enums.RolUsuario;
 import com.example.enums.EstadoCompra;
 import com.example.enums.TipoCompra;
 import com.example.enums.TipoZona;
@@ -25,6 +26,7 @@ public class Aficionado extends Usuario {
         super(codigoUnico, cedula, nombres, apellidos, usuario, contrasenia, correo);
         this.celular = celular;
         this.paisFavorito = paisFavorito;
+        this.rol=RolUsuario.A;
     }
     // #endregion
 
