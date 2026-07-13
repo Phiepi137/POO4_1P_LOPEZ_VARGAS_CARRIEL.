@@ -1,4 +1,5 @@
 package com.example;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.example.enums.TipoZona;
@@ -18,52 +19,90 @@ public class Sistema {
         sc = new Scanner(System.in);
     }
 
-    public void iniciarSesion(){
+    public void iniciarSesion() {
         System.out.print("Usuario: ");
-        String us=sc.nextLine();
+        String us = sc.nextLine();
         System.out.println("Contraseña: ");
-        String pw=sc.nextLine();
-        Usuario u=autenticar(us, pw);
-        if (u!=null){
-            if (verificarIdentidad(u)){
+        String pw = sc.nextLine();
+        Usuario u = autenticar(us, pw);
+        if (u != null) {
+            if (verificarIdentidad(u)) {
                 System.out.println("Bienvenido, " + u.getNombreCompleto() + ".");
                 mostrarMenu(u);
             } else {
                 System.out.println("No se pudo verificar la identidad del usuario.");
             }
-        }else{
+        } else {
             System.out.println("Usuario o contraseña incorrectos.");
         }
     }
-    public Usuario autenticar(String usuario, String contraseña){
-        for(Usuario e: usuarios){
-            if(e.autenticar(usuario, contraseña)) {
+
+    public Usuario autenticar(String usuario, String contraseña) {
+        for (Usuario e : usuarios) {
+            if (e.autenticar(usuario, contraseña)) {
                 return e;
             }
         }
         return null;
     }
 
-    public boolean verificarIdentidad(Usuario usuario){
-        if (usuario instanceof Aficionado){
+    public boolean verificarIdentidad(Usuario usuario) {
+
+        if (usuario instanceof Aficionado) {
             Aficionado a = (Aficionado) usuario;
-            System.out.println("Celular: " + a.getCelular());
-            return true;
+
+            System.out.println("Rol detectado: AFICIONADO");
+            System.out.println("Bienvenido, " + a.getNombreCompleto());
+            System.out.println("Celular registrado: " + a.getCelular());
+
+            System.out.print("¿Este número de celular es correcto? (S/N): ");
+            String respuesta = sc.nextLine();
+
+            if (respuesta.equalsIgnoreCase("S")) {
+                System.out.println("Identidad confirmada.");
+                return true;
+            } else {
+                System.out.println("Verificación fallida.");
+                System.out.println("Por motivos de seguridad se cerrará la sesión.");
+                return false;
+            }
+
+        } else if (usuario instanceof Organizador) {
+
+            Organizador o = (Organizador) usuario;
+
+            System.out.println("Rol detectado: ORGANIZADOR");
+            System.out.println("Bienvenido, " + o.getNombreCompleto());
+            System.out.println("Empresa asignada: " + o.getEmpresaOrganizadora());
+
+            System.out.print("¿Esta empresa es correcta? (S/N): ");
+            String respuesta = sc.nextLine();
+
+            if (respuesta.equalsIgnoreCase("S")) {
+                System.out.println("Identidad confirmada.");
+                return true;
+            } else {
+                System.out.println("Verificación fallida.");
+                System.out.println("Por motivos de seguridad se cerrará la sesión.");
+                return false;
+            }
+
         }
-        return true;
+
+        return false;
     }
 
-    public void mostrarMenu(Usuario usuario){
-        if(usuario instanceof Aficionado){
+    public void mostrarMenu(Usuario usuario) {
+        if (usuario instanceof Aficionado) {
             boolean salir = false;
             Aficionado e = (Aficionado) usuario;
 
-            while(!salir){
+            while (!salir) {
                 System.out.println("\n1. Consultar partidos\n2. Consultar mis entradas\n3. Comprar entradas\n4. Salir");
                 int opcion = sc.nextInt();
                 sc.nextLine();
 
-                switch(opcion){
+                switch (opcion) {
                     case 1:
                         mostrarPartidos();
                         break;
@@ -81,90 +120,119 @@ public class Sistema {
                         System.out.println("Opción incorrecta. Intente nuevamente.");
                 }
             }
-        }else{
+        } else {
             System.out.println("1. Consultar reportes\n2. Consultar entradas");
         }
 
     }
-    public void mostrarKitDisp(){
-        for(Kit k : kits){
-            if(k.disponibilidad()){
+
+    public void mostrarKitDisp() {
+        for (Kit k : kits) {
+            if (k.disponibilidad()) {
                 System.out.println(k);
             }
         }
     }
+
     // Sobrecarga de metodos
-    public void mostrarPartidos(){
-        for(Partido p:partidos){
+    public void mostrarPartidos() {
+        for (Partido p : partidos) {
             p.mostrarInformacion();
         }
     }
-    public void mostrarPartidos(Kit kit){
-        for(Partido p:kit.getPartidosIncluidos()){
+
+    public void mostrarPartidos(Kit kit) {
+        for (Partido p : kit.getPartidosIncluidos()) {
             p.mostrarInformacion();
         }
     }
     //
 
-    public void mostrarPrecio(Compra compra){
-        System.out.println("Valor a pagar: $"+compra.getValorPagado());
+    public void mostrarPrecio(Compra compra) {
+        System.out.println("Valor a pagar: $" + compra.getValorPagado());
     }
 
     // Buscar
-    public Partido buscarPartido(String codigo){
-        for(Partido p:partidos){
-            if(p.getCodigoPartido().equals(codigo)){
+    public Partido buscarPartido(String codigo) {
+        for (Partido p : partidos) {
+            if (p.getCodigoPartido().equals(codigo)) {
                 return p;
             }
         }
         return null;
     }
-    public Kit buscarKit(String codigo){
-        for(Kit k : kits){
-            if(k.getCodigoKit().equals(codigo)){
+
+    public Kit buscarKit(String codigo) {
+        for (Kit k : kits) {
+            if (k.getCodigoKit().equals(codigo)) {
                 return k;
             }
         }
         return null;
     }
+
     //
-    // Sobrecarga de metodos
-    public void notificar(Aficionado aficionado, Compra compra){
-        System.out.println(aficionado.getNombreCompleto() + " ha hecho una compra!");
+    // Sobrecarga de metodos notificar
+    public void notificar(Aficionado aficionado, Compra compra) {
+        System.out.println("\n===== NOTIFICACIÓN =====");
+        System.out.println("Para: " + aficionado.getCorreo());
+        System.out.println("Estimado(a) " + aficionado.getNombreCompleto());
+        System.out.println("Su compra se realizó exitosamente.");
+        System.out.println("Código de compra: " + compra.getCodigoReferencia());
+        System.out.println("Valor pagado: $" + compra.getValorPagado());
+        System.out.println("========================\n");
     }
-    public void notificar(Kit kit, Aficionado aficionado, Compra compra){
-        System.out.println(aficionado.getNombreCompleto() + " ha comprado el kit " + kit.getNombre());
+
+    public void notificar(Kit kit, Aficionado aficionado, Compra compra) {
+
+        System.out.println("\n===== NOTIFICACIÓN =====");
+        System.out.println("Para: " + aficionado.getCorreo());
+        System.out.println("Estimado(a) " + aficionado.getNombreCompleto());
+        System.out.println("Ha comprado el kit: " + kit.getNombre());
+        System.out.println("Descripción: " + kit.getDescripcion());
+        System.out.println("Código de compra: " + compra.getCodigoReferencia());
+        System.out.println("Valor pagado: $" + compra.getValorPagado());
+        System.out.println("========================\n");
+
     }
-    public void notificar(Organizador organizador, String reporte){
-        System.out.println("...");
+
+    public void notificar(Organizador organizador, Reporte reporte) {
+        System.out.println("\n===== REPORTE =====");
+        System.out.println("Para: " + organizador.getCorreo());
+        System.out.println("Organizador: " + organizador.getNombreCompleto());
+
+        System.out.println(reporte);
+
+        System.out.println("===================\n");
     }
-    // 
-    public void crearCompra(Aficionado a){
+
+    //
+    public void crearCompra(Aficionado a) {
         System.out.println("1. Comprar entrada\n2. Comprar kit");
-        int opcion=sc.nextInt();
+        int opcion = sc.nextInt();
         sc.nextLine();
-        switch(opcion){
+        switch (opcion) {
             case 1:
                 mostrarPartidos();
                 // Verificar si existe el partido
-                Partido p=null;
+                Partido p = null;
                 String codigo;
-                while(p==null){
+                while (p == null) {
                     System.out.println("Codigo del partido: ");
-                    codigo=sc.nextLine();
-                    p=buscarPartido(codigo);
-                    if(p==null){
+                    codigo = sc.nextLine();
+                    p = buscarPartido(codigo);
+                    if (p == null) {
                         System.out.println("Código incorrecto. Intente nuevamente.");
                     }
                 }
                 // Verificar si existe la zona
                 Zona z = null;
-                while(z == null){
+                while (z == null) {
                     System.out.println("Escoja zona\n1. General\n2. Preferencia\n3. VIP");
                     int zona = sc.nextInt();
                     sc.nextLine();
                     TipoZona tipo = null;
-                    switch(zona){
+                    switch (zona) {
                         case 1:
                             tipo = TipoZona.GENERAL;
                             break;
@@ -179,98 +247,88 @@ public class Sistema {
                             continue;
                     }
                     z = p.buscarZona(tipo);
-                    if (z == null){
+                    if (z == null) {
                         System.out.println("Esa zona no existe para este partido.");
                     }
                 }
                 // En caso de que no hayan entradas
-                if(z.getDisponible()==0){
-                        System.out.println("No hay suficientes entradas.");    
-                        return;
-                    }
+                if (z.getDisponible() == 0) {
+                    System.out.println("No hay suficientes entradas.");
+                    return;
+                }
                 int cantidad;
                 while (true) {
                     System.out.print("Cantidad de entradas: ");
                     cantidad = sc.nextInt();
                     sc.nextLine();
-                    if (cantidad<=0){
+                    if (cantidad <= 0) {
                         System.out.println("Debe ingresar una cantidad mayor que cero.");
-                    }else if(cantidad>z.getDisponible()){
-                        System.out.println("Solo quedan "+z.getDisponible()+" entradas disponibles.");
-                    }else{
+                    } else if (cantidad > z.getDisponible()) {
+                        System.out.println("Solo quedan " + z.getDisponible() + " entradas disponibles.");
+                    } else {
                         break;
                     }
                 }
                 System.out.print("Ingrese el número de tarjeta: ");
                 String tarjeta = sc.nextLine();
-                Compra compra = a.comprarEntradas(p.getCodigoPartido(),z.getTipo(),cantidad,tarjeta);
+                Compra compra = a.comprarEntradas(p.getCodigoPartido(), z.getTipo(), cantidad, tarjeta);
                 if (compra != null) {
                     compras.add(compra);
-                // Descontar entradas disponibles
-                    z.setDisponible(z.getDisponible()-cantidad);
+                    // Descontar entradas disponibles
+                    z.setDisponible(z.getDisponible() - cantidad);
                     mostrarPrecio(compra);
                     notificar(a, compra);
                     System.out.println("Compra realizada exitosamente.");
                 }
 
-            break;
-
-
-
+                break;
 
             case 2:
                 mostrarKitDisp();
-                Kit kit=null;
-                while (kit==null) {
+                Kit kit = null;
+                while (kit == null) {
                     System.out.print("Ingrese el código del kit: ");
-                    String codigoKit=sc.nextLine();
-                    kit=buscarKit(codigoKit);
-                    if(kit==null) {
+                    String codigoKit = sc.nextLine();
+                    kit = buscarKit(codigoKit);
+                    if (kit == null) {
                         System.out.println("Código incorrecto. Intente nuevamente.");
                     }
                 }
-                if(kit.getDisponibles()==0){
+                if (kit.getDisponibles() == 0) {
                     System.out.println("Lo sentimos, el kit está agotado.");
                     break;
                 }
 
                 int cantidadKit;
-                while(true){
+                while (true) {
                     System.out.print("Cantidad de Kit: ");
-                    cantidadKit=sc.nextInt();
+                    cantidadKit = sc.nextInt();
                     sc.nextLine();
-                    if(cantidadKit<=0) {
+                    if (cantidadKit <= 0) {
                         System.out.println("La cantidad debe ser mayor que cero.");
-                    }else if(cantidadKit>kit.getDisponibles()){
+                    } else if (cantidadKit > kit.getDisponibles()) {
                         System.out.println("Solo quedan " + kit.getDisponibles() + " Kit disponibles.");
-                    }
-                    else{
+                    } else {
                         break;
                     }
                 }
 
                 System.out.print("Ingrese el número de tarjeta: ");
-                String tarjetaKit=sc.nextLine();
-                Compra compraKit = a.comprarEntradas(kit.getCodigoKit(),cantidadKit,tarjetaKit);
-                if(compraKit!=null){
+                String tarjetaKit = sc.nextLine();
+                Compra compraKit = a.comprarEntradas(kit.getCodigoKit(), cantidadKit, tarjetaKit);
+                if (compraKit != null) {
                     compras.add(compraKit);
-                    kit.setDisponibles(kit.getDisponibles()-cantidadKit);
+                    kit.setDisponibles(kit.getDisponibles() - cantidadKit);
                     mostrarPrecio(compraKit);
                     notificar(kit, a, compraKit);
                     System.out.println("Compra realizada exitosamente.");
                 }
                 break;
-            
+
             default:
-            System.out.println("Opcion incorrecta");
+                System.out.println("Opcion incorrecta");
         }
 
-
     }
-   
-
-
-
-
 
 }
