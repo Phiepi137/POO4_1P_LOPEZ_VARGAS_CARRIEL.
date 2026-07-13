@@ -8,6 +8,7 @@ protected String apellidos;
 protected String usuario;
 protected String contrasenia;
 protected String correo;
+protected RolUsuario rol;
 
 // Constructor
 public Usuario(String codigoUnico, String cedula, String nombres, String apellidos, String usuario, String contrasenia, String correo){
@@ -18,6 +19,7 @@ public Usuario(String codigoUnico, String cedula, String nombres, String apellid
     this.usuario=usuario;
     this.contrasenia=contrasenia;
     this.correo=correo;
+    this.rol=rol;
 }
 // getters
 public String getCodigoUnico(){
@@ -27,10 +29,15 @@ public String getUsuario(){
     return usuario;
 }
 public String getContraseña(){
-    return contrasenia;
+    return contrasenia
+}
+public RolUsuario getRol(){
+    return rol;
 }
 // Metodos
-public void conslEntradas(){
+public abstract void conslEntradas();
 
-}
+
+
+
 }

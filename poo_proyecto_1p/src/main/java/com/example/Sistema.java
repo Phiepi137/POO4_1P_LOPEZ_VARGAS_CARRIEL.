@@ -31,8 +31,15 @@ public class Sistema {
         }
         return null;
     }
-   /*public boolean verificarIdentidad(Usuario usuario){
-   }*/
+
+    //verificar usuario
+   public boolean verificarIdentidad(Usuario usuario){
+    if(usuario.getNombre().equals(usuario.getNombre()) && usuario.getContraseña().equals(usuario.getContraseña())){
+        return true;
+    }
+    return false;
+   }
+
     public void mostrarMenu(Usuario usuario){
         if(usuario instanceof Aficionado){
             System.out.println("1. Consultar partidos\n2. Consultar mis entradas\n3. Comprar entradas\n4. Salir");
