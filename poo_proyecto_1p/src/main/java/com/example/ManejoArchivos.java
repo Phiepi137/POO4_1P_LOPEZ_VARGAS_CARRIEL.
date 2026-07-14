@@ -75,7 +75,30 @@ public class ManejoArchivos {
             System.out.println("Error al leer aficionado.");   
         }
     }
+    // completar arhivos de organizador
+    public static void leerOrganizadores(String ruta, ArrayList<Usuario> us) {
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            br.readLine(); // Saltar encabezado
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split("\\|");
+                String codigo = datos[0];
+                String empresa = datos[4];
+                String cargo = datos[5];
+                for (Usuario u : us) {
+                    if (u instanceof Organizador && u.getCodigo().equals(codigo)) {
+                        Organizador organizador = (Organizador) u;
+                        organizador.setEmpresaOrganizadora(empresa);
+                        organizador.setCargo(cargo);
+                        break;
+                    }
+                }
+            }
 
+        } catch (IOException e) {
+            System.out.println("Error al leer organizadores.");
+        }
+    }
 
     // leer archivos de partidos
     public static ArrayList<Partido> leerPartidos(String ruta){
@@ -99,8 +122,8 @@ public class ManejoArchivos {
                 zonas.add(new Zona(TipoZona.PREFERENCIAL,Integer.parseInt(datos[8]),85.0));
                 zonas.add(new Zona(TipoZona.VIP,Integer.parseInt(datos[9]),150.0));
 
-                FasePartido fase = FasePartido.valueOf(datos[10].toUpperCase());
-
+                String faseTexto = datos[10].trim().toUpperCase().replace(" ", "_");
+                FasePartido fase = FasePartido.valueOf(faseTexto);
                 partidos.add(new Partido(codigo,local,visitante,fecha,estadio,ciudad,capacidad,fase,zonas));
             }
 
@@ -108,5 +131,39 @@ public class ManejoArchivos {
             System.out.println("Error al leer partidos: " + e.getMessage());
         }
         return partidos;
+        
+        
+    }
+    // leer archivos de kits
+    public static ArrayList<Kit> leerKits(String ruta, ArrayList<Partido> listaPartidos) {
+        ArrayList<Kit> kits = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            br.readLine(); // Saltar encabezado
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split("\\|");
+                String codigo = datos[0];
+                String nombre = datos[1];
+                String descripcion = datos[2];
+                // Partidos incluidos en el kit
+                ArrayList<Partido> partidosIncluidos = new ArrayList<>();
+                String[] codigosPartidos = datos[3].split(",");
+                for (String codigoPartido : codigosPartidos) {
+                    codigoPartido = codigoPartido.trim();
+                    for (Partido p : listaPartidos) {
+                        if (p.getCodigoPartido().equals(codigoPartido)) {
+                            partidosIncluidos.add(p);
+                            break;
+                        }
+                    }
+                }
+                double precio = Double.parseDouble(datos[4]);
+                int disponibles = Integer.parseInt(datos[5]);
+                kits.add(new Kit(codigo, nombre, descripcion, partidosIncluidos, precio, disponibles));
+            }
+        } catch (Exception e) {
+            System.out.println("Error al leer kits: " + e.getMessage());
+        }
+        return kits;
     }
 }
