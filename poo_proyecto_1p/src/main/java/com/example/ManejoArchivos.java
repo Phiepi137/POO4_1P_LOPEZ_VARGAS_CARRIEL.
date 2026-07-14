@@ -78,74 +78,35 @@ public class ManejoArchivos {
 
 
     // leer archivos de partidos
-    public static ArrayList<Partido> leerPartidos(String ruta) {
+    public static ArrayList<Partido> leerPartidos(String ruta){
+        ArrayList<Partido> partidos = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            br.readLine(); // saltar encabezado
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split("\\|");
+                String codigo = datos[0];
+                String local = datos[1];
+                String visitante = datos[2];
+                LocalDate fecha = LocalDate.parse(datos[3]);
+                String estadio = datos[4];
+                String ciudad = datos[5];
+                int capacidad = Integer.parseInt(datos[6]);
 
-    ArrayList<Partido> partidos = new ArrayList<>();
+                // Crear las zonas
+                ArrayList<Zona> zonas = new ArrayList<>();
+                zonas.add(new Zona(TipoZona.GENERAL,Integer.parseInt(datos[7]),45.0));
+                zonas.add(new Zona(TipoZona.PREFERENCIAL,Integer.parseInt(datos[8]),85.0));
+                zonas.add(new Zona(TipoZona.VIP,Integer.parseInt(datos[9]),150.0));
 
-    try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+                FasePartido fase = FasePartido.valueOf(datos[10].toUpperCase());
 
-        String linea;
+                partidos.add(new Partido(codigo,local,visitante,fecha,estadio,ciudad,capacidad,fase,zonas));
+            }
 
-        br.readLine(); // saltar encabezado
-
-        while ((linea = br.readLine()) != null) {
-
-            String[] datos = linea.split("\\|");
-
-            String codigo = datos[0];
-            String local = datos[1];
-            String visitante = datos[2];
-
-            LocalDate fecha = LocalDate.parse(datos[3]);
-
-            String estadio = datos[4];
-            String ciudad = datos[5];
-
-            int capacidad = Integer.parseInt(datos[6]);
-
-
-            // Crear zonas
-            ArrayList<Zona> zonas = new ArrayList<>();
-
-            zonas.add(new Zona(
-                    TipoZona.GENERAL,
-                    Integer.parseInt(datos[7]),
-                    0.0
-            ));
-
-            zonas.add(new Zona(
-                    TipoZona.PREFERENCIAL,
-                    Integer.parseInt(datos[8]),
-                    0.0
-            ));
-
-            zonas.add(new Zona(
-                    TipoZona.VIP,
-                    Integer.parseInt(datos[9]),
-                    0.0
-            ));
-
-
-            FasePartido fase = FasePartido.valueOf(datos[10].toUpperCase());
-
-
-            partidos.add(new Partido(
-                    codigo,
-                    local,
-                    visitante,
-                    fecha,
-                    estadio,
-                    ciudad,
-                    capacidad,
-                    fase,
-                    zonas
-            ));
+        } catch (Exception e) {
+            System.out.println("Error al leer partidos: " + e.getMessage());
         }
-
-    } catch (Exception e) {
-        System.out.println("Error al leer partidos: " + e.getMessage());
+        return partidos;
     }
-
-    return partidos;
-}
 }
