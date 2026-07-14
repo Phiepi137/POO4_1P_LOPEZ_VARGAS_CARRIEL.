@@ -79,7 +79,7 @@ public class Kit {
         return codigoKit + " - " + nombre +
                 "\nDescripción: " + descripcion +
                 "\nPrecio: $" + precio +
-                "\nDisponibles: " + disponibles;
+                "\nDisponibles: " + disponibles+"\n------------------";
 
     }
 
