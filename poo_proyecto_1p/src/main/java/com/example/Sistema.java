@@ -22,14 +22,16 @@ public class Sistema {
     // Leer Archivos
     public void cargarDatos() {
 
-        usuarios = ManejoArchivos.leerUsuarios("archivos/usuarios.txt");
+        usuarios = ManejoArchivos.leerUsuarios("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/usuarios.txt");
 
     }
 
     public void iniciarSesion() {
+        System.out.println("Bienvenido al Sistema");
+        System.out.println("--------------------------");
         System.out.print("Usuario: ");
         String us = sc.nextLine();
-        System.out.println("Contraseña: ");
+        System.out.print("Contraseña: ");
         String pw = sc.nextLine();
         Usuario u = autenticar(us, pw);
         if (u != null) {
@@ -57,7 +59,7 @@ public class Sistema {
 
         if (usuario instanceof Aficionado) {
             Aficionado a = (Aficionado) usuario;
-
+            System.out.println("--------------------------");
             System.out.println("Rol detectado: AFICIONADO");
             System.out.println("Bienvenido, " + a.getNombreCompleto());
             System.out.println("Celular registrado: " + a.getCelular());

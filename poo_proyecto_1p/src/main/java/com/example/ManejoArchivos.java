@@ -15,7 +15,7 @@ public class ManejoArchivos {
 
             while ((linea = br.readLine()) != null) {
 
-                String[] datos = linea.split(";");
+                String[] datos = linea.split("\\|");
 
                 String codigo = datos[0];
                 String cedula = datos[1];
@@ -37,7 +37,7 @@ public class ManejoArchivos {
                             contrasenia,
                             correo,
                             "",          // celular
-                            ""           // país favorito
+                            ""          // país favorito
                     ));
 
                 } else {
