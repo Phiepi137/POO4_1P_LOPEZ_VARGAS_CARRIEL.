@@ -23,7 +23,7 @@ public class Sistema {
     public void cargarDatos() {
 
         usuarios = ManejoArchivos.leerUsuarios("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/usuarios.txt");
-
+        ManejoArchivos.leerAficionados("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/aficionados.txt",usuarios);
     }
 
     public void iniciarSesion() {
@@ -105,12 +105,13 @@ public class Sistema {
         if (usuario instanceof Aficionado) {
             boolean salir = false;
             Aficionado e = (Aficionado) usuario;
-
+            
             while (!salir) {
+                try{
                 System.out.println("\n1. Consultar partidos\n2. Consultar mis entradas\n3. Comprar entradas\n4. Salir");
                 int opcion = sc.nextInt();
                 sc.nextLine();
-
+                
                 switch (opcion) {
                     case 1:
                         mostrarPartidos();
@@ -127,6 +128,10 @@ public class Sistema {
                         break;
                     default:
                         System.out.println("Opción incorrecta. Intente nuevamente.");
+                }
+                }catch(Exception ex1){
+                    System.out.println("Debe ingresar un número válido.");
+                    sc.nextLine();
                 }
             }
         } else {
@@ -246,7 +251,7 @@ public class Sistema {
                             tipo = TipoZona.GENERAL;
                             break;
                         case 2:
-                            tipo = TipoZona.PREFERENCIA;
+                            tipo = TipoZona.PREFERENCIAL;
                             break;
                         case 3:
                             tipo = TipoZona.VIP;
