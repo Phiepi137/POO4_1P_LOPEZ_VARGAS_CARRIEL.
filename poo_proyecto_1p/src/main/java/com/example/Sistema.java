@@ -212,6 +212,7 @@ System.out.println("Kits cargados: " + kits.size());
         System.out.println("Ha comprado el kit: " + kit.getNombre());
         System.out.println("Descripción: " + kit.getDescripcion());
         System.out.println("Código de compra: " + compra.getCodigoReferencia());
+
         System.out.println("Valor pagado: $" + compra.getValorPagado());
         System.out.println("========================\n");
 
@@ -299,6 +300,7 @@ System.out.println("Kits cargados: " + kits.size());
                     z.setDisponible(z.getDisponible() - cantidad);
                     mostrarPrecio(compra);
                     notificar(a, compra);
+                    compra.setValorPagado(cantidad*z.getPrecio());
                     System.out.println("Compra realizada exitosamente.");
                 }
 
@@ -343,6 +345,7 @@ System.out.println("Kits cargados: " + kits.size());
                     mostrarPrecio(compraKit);
                     notificar(kit, a, compraKit);
                     System.out.println("Compra realizada exitosamente.");
+                    compraKit.setValorPagado(cantidadKit*kit.getPrecio());
                 }
                 break;
 

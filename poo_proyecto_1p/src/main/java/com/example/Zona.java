@@ -22,7 +22,6 @@ public class Zona {
     public int getDisponible() {
         return disponible;
     }
-
     public double getPrecio() {
         return precio;
     }
@@ -52,6 +51,8 @@ public class Zona {
         }
 
     }
+    
+    
 
     @Override
     public String toString() {
