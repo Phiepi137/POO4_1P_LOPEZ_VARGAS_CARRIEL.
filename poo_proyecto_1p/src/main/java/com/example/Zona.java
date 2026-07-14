@@ -8,9 +8,8 @@ public class Zona {
     private double precio;
 
     // constructor
-    public Zona(TipoZona tipo, int disponible, double precio) {
+    public Zona(TipoZona tipo, double precio) {
         this.tipo = tipo;
-        this.disponible = disponible;
         this.precio = precio;
     }
 

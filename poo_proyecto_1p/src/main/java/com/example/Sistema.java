@@ -1,7 +1,10 @@
 package com.example;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.example.enums.FasePartido;
 import com.example.enums.TipoZona;
 
 public class Sistema {
@@ -19,12 +22,228 @@ public class Sistema {
         sc = new Scanner(System.in);
     }
 
-    // Leer Archivos
-    public void cargarDatos() {
+    // #region Metodos de carga de Usuario
+    public void cargarUsuarios() {
 
-        usuarios = ManejoArchivos.leerUsuarios("archivos/usuarios.txt");
+        ArrayList<String> lineas = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/usuarios.txt");
+
+        for (String linea : lineas) {
+
+            String[] datos = linea.split(";");
+
+            String codigo = datos[0];
+            String cedula = datos[1];
+            String nombres = datos[2];
+            String apellidos = datos[3];
+            String usuario = datos[4];
+            String contrasenia = datos[5];
+            String correo = datos[6];
+            String rol = datos[7];
+
+            if (rol.equals("A")) {
+
+                usuarios.add(new Aficionado(
+                        codigo,
+                        cedula,
+                        nombres,
+                        apellidos,
+                        usuario,
+                        contrasenia,
+                        correo,
+                        "",
+                        ""));
+
+            } else {
+
+                usuarios.add(new Organizador(
+                        codigo,
+                        cedula,
+                        nombres,
+                        apellidos,
+                        usuario,
+                        contrasenia,
+                        correo,
+                        null,
+                        "",
+                        ""));
+
+            }
+
+        }
 
     }
+    // #endregion
+
+    // #region Metodo de carga de Aficionados
+    public void cargarAficionados() {
+
+        ArrayList<String> usuariosTxt = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/usuarios.txt");
+        ArrayList<String> aficionadosTxt = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/aficionados.txt");
+
+        usuariosTxt.remove(0);
+        aficionadosTxt.remove(0);
+
+        for (String lineaUsuario : usuariosTxt) {
+
+            String[] u = lineaUsuario.split("\\|");
+
+            if (!u[7].equals("A"))
+                continue;
+
+            for (String lineaAficionado : aficionadosTxt) {
+
+                String[] a = lineaAficionado.split("\\|");
+
+                if (u[0].equals(a[0])) {
+
+                    usuarios.add(new Aficionado(
+                            u[0],
+                            u[1],
+                            u[2],
+                            u[3],
+                            u[4],
+                            u[5],
+                            u[6],
+                            a[4],
+                            a[5]));
+
+                    break;
+                }
+
+            }
+
+        }
+
+    }
+
+    // #endregion
+
+    // #region Metodos de carga de Organizador
+    public void cargarOrganizadores() {
+
+        ArrayList<String> usuariosTxt = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/usuarios.txt");
+        ArrayList<String> organizadoresTxt = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/organizadores.txt");
+
+        usuariosTxt.remove(0);
+        organizadoresTxt.remove(0);
+
+        for (String lineaUsuario : usuariosTxt) {
+
+            String[] u = lineaUsuario.split("\\|");
+
+            if (!u[7].equals("O"))
+                continue;
+
+            for (String lineaOrganizador : organizadoresTxt) {
+
+                String[] o = lineaOrganizador.split("\\|");
+
+                if (u[0].equals(o[0])) {
+
+                    usuarios.add(new Organizador(
+                            u[0],
+                            u[1],
+                            u[2],
+                            u[3],
+                            u[4],
+                            u[5],
+                            u[6],
+                            null,
+                            o[4],
+                            o[5]));
+
+                    break;
+                }
+
+            }
+
+        }
+
+    }
+    // #endregion
+
+    // #region Metodo de carga de Partidos
+    public void cargarPartidos() {
+
+        ArrayList<String> lineas = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/partidos.txt");
+
+        lineas.remove(0); // Eliminar encabezado
+
+        for (String linea : lineas) {
+
+            String[] p = linea.split("\\|");
+
+            ArrayList<Zona> zonas = new ArrayList<>();
+
+            zonas.add(new Zona(
+                    TipoZona.GENERAL,
+                    Integer.parseInt(p[7])));
+
+            zonas.add(new Zona(
+                    TipoZona.PREFERENCIAL,
+                    Integer.parseInt(p[8])));
+
+            zonas.add(new Zona(
+                    TipoZona.VIP,
+                    Integer.parseInt(p[9])));
+
+            Partido partido = new Partido(
+                    p[0], // Código
+                    p[1], // Local
+                    p[2], // Visitante
+                    LocalDate.parse(p[3]), // Fecha
+                    p[4], // Estadio
+                    p[5], // Ciudad
+                    Integer.parseInt(p[6]), // Capacidad
+                    FasePartido.valueOf(p[10]), // Fase
+                    zonas);
+
+            partidos.add(partido);
+
+        }
+
+    }
+    // #endregion
+
+    // #region Metodo de carga de Kits
+    public void cargarKits() {
+
+        ArrayList<String> lineas = ManejoArchivos.LeeFichero("poo_proyecto_1p/src/main/resources/kits.txt");
+
+        lineas.remove(0);
+
+        for (String linea : lineas) {
+
+            String[] k = linea.split("\\|");
+
+            ArrayList<Partido> partidosKit = new ArrayList<>();
+
+            String[] codigos = k[3].split(",");
+
+            for (String codigo : codigos) {
+
+                Partido partido = buscarPartido(codigo);
+
+                if (partido != null) {
+                    partidosKit.add(partido);
+                }
+
+            }
+
+            Kit kit = new Kit(
+                    k[0],
+                    k[1],
+                    k[2],
+                    partidosKit,
+                    Double.parseDouble(k[4]),
+                    Integer.parseInt(k[5]));
+
+            kits.add(kit);
+
+        }
+
+    }
+    // #endregion
 
     public void iniciarSesion() {
         System.out.print("Usuario: ");
@@ -244,7 +463,7 @@ public class Sistema {
                             tipo = TipoZona.GENERAL;
                             break;
                         case 2:
-                            tipo = TipoZona.PREFERENCIA;
+                            tipo = TipoZona.PREFERENCIAL;
                             break;
                         case 3:
                             tipo = TipoZona.VIP;

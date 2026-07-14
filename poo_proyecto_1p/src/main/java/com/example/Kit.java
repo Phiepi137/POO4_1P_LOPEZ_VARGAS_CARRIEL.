@@ -73,6 +73,12 @@ public class Kit {
 
     }
 
+    public void mostrarPartidosDisponibles(){
+        for(Partido p: partidosIncluidos){
+            System.out.println(p);
+        }
+    }
+
     @Override
     public String toString() {
 

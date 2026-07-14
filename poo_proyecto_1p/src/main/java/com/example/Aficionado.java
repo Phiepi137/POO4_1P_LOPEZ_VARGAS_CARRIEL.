@@ -5,6 +5,7 @@ import com.example.enums.EstadoCompra;
 import com.example.enums.TipoCompra;
 import com.example.enums.TipoZona;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Aficionado extends Usuario {
 
@@ -23,10 +24,9 @@ public class Aficionado extends Usuario {
             String correo,
             String celular,
             String paisFavorito) {
-        super(codigoUnico, cedula, nombres, apellidos, usuario, contrasenia, correo);
+        super(codigoUnico, cedula, nombres, apellidos, usuario, contrasenia, correo, RolUsuario.A);
         this.celular = celular;
         this.paisFavorito = paisFavorito;
-        this.rol=RolUsuario.A;
     }
     // #endregion
 
@@ -82,12 +82,15 @@ public class Aficionado extends Usuario {
 
     }
 
-    public Compra comprarEntradas(String codigo, TipoZona zona, int cantidad, String tarjeta) {
-        double total = 0;
-        Compra c = new Compra(TipoCompra.ENTRADA, codigo, cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);
+    // Aficionado compra Entradas para Partido
+    public Compra comprarEntradas(String codigoRef, int cantidad, TipoZona zona, String tarjeta) {
+        int total= (int) (Math.random() * (1000));
+        Compra c = new Compra(TipoCompra.ENTRADA,codigoRef,cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);
+        
         return c;
-    }
 
+    }
+    //Aficionado compra Entradas para Kits
     public Compra comprarEntradas(String codigo, int cantidad, String tarjeta) {
         double total = 0;
         Compra c = new Compra(TipoCompra.ENTRADA, codigo, cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);

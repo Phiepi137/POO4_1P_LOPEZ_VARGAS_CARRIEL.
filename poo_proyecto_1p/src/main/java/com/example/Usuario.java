@@ -1,10 +1,11 @@
 package com.example;
 
-import java.util.ArrayList;
+//Imports
+import java.util.ArrayList; //Importación para usar ArrayList
+import com.example.enums.RolUsuario; //Importación para usar Enum RolUsuario
 
-import com.example.enums.RolUsuario;
-
-public abstract class Usuario {
+//Clase
+public abstract class Usuario { //abstracta porque espera implementación específica
 
     // #region Variables de instancia
     protected String codigoUnico;
@@ -24,7 +25,8 @@ public abstract class Usuario {
             String apellidos,
             String usuario,
             String contrasenia,
-            String correo) {
+            String correo,
+            RolUsuario rol) {
         this.codigoUnico = codigoUnico;
         this.cedula = cedula;
         this.nombres = nombres;
@@ -32,6 +34,7 @@ public abstract class Usuario {
         this.usuario = usuario;
         this.contrasenia = contrasenia;
         this.correo = correo;
+        this.rol = rol;
     }
     // #endregion
 

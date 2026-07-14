@@ -1,7 +1,6 @@
 package com.example;
 
 import java.util.ArrayList;
-
 import com.example.enums.RolUsuario;
 
 public class Organizador extends Usuario {
@@ -9,7 +8,7 @@ public class Organizador extends Usuario {
     // #region Variables de Instancia
     private String empresaOrganizadora;
     private String cargo;
-    //#endregion
+    // #endregion
 
     // #region Constructor
     public Organizador(String codigo,
@@ -19,16 +18,14 @@ public class Organizador extends Usuario {
             String usuario,
             String contrasenia,
             String correo,
-            RolUsuario rol,
             String empresaOrganizadora,
             String cargo) {
 
         super(codigo, cedula, nombres, apellidos,
-                usuario, contrasenia, correo);
+                usuario, contrasenia, correo, RolUsuario.O);
 
         this.empresaOrganizadora = empresaOrganizadora;
         this.cargo = cargo;
-        this.rol = RolUsuario.O;
 
     }
     // #endregion
@@ -84,6 +81,6 @@ public class Organizador extends Usuario {
 
     }
 
-    //#endregion
+    // #endregion
 
 }

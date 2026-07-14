@@ -1,26 +1,33 @@
 package com.example;
 
-import java.time.LocalDate;
+import java.util.Date;
 import com.example.enums.FasePartido;
 import com.example.enums.TipoZona;
-
-import java.util.ArrayList;
 
 public class Partido {
     // Atributos
     private String codigoPartido;
     private String seleccionLocal;
     private String seleccionVisitante;
-    private LocalDate fecha;
+    private Date fecha;
     private String estadio;
     private String ciudad;
     private int capacidad;
     private FasePartido fase;
-    private ArrayList<Zona> zonas;
+    private int[] entradasPorZona = new int[3];
 
-    // constructor
-    public Partido(String codigo, String seleccionLocal, String seleccionVisitante, LocalDate fecha, String estadio,
-            String ciudad, int capacidad, FasePartido fase, ArrayList<Zona> zonas) {
+    // #region constructor
+    public Partido(String codigo,
+            String seleccionLocal,
+            String seleccionVisitante,
+            Date fecha,
+            String estadio,
+            String ciudad,
+            int capacidad,
+            FasePartido fase,
+            int entradasGeneral,
+            int entradasPreferencial,
+            int entradasVIP) {
         this.codigoPartido = codigo;
         this.seleccionLocal = seleccionLocal;
         this.seleccionVisitante = seleccionVisitante;
@@ -29,9 +36,14 @@ public class Partido {
         this.ciudad = ciudad;
         this.capacidad = capacidad;
         this.fase = fase;
-        this.zonas = zonas;
+        this.entradasPorZona[0] = entradasGeneral;
+        this.entradasPorZona[1] = entradasPreferencial;
+        this.entradasPorZona[2] = entradasVIP;
     }
 
+    // #endregion
+
+    // #region getters y setters
     // getters
     public String getCodigoPartido() {
         return codigoPartido;
@@ -45,7 +57,7 @@ public class Partido {
         return seleccionVisitante;
     }
 
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
@@ -65,8 +77,8 @@ public class Partido {
         return fase;
     }
 
-    public ArrayList<Zona> getZonas() {
-        return zonas;
+    public int[] getEntradasPorZona() {
+        return entradasPorZona;
     }
 
     // setters
@@ -82,7 +94,7 @@ public class Partido {
         this.seleccionVisitante = seleccionVisitante;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
@@ -102,15 +114,19 @@ public class Partido {
         this.fase = fase;
     }
 
-    public void setZonas(ArrayList<Zona> zonas) {
-        this.zonas = zonas;
+    public void setEntradasPorZona(int eG, int eP, int eV) {
+        this.entradasPorZona[0] = eG;
+        this.entradasPorZona[1] = eP;
+        this.entradasPorZona[3] = eV;
     }
+
+    // #endregion
 
     // Metodos
     public void mostrarInformacion() {
 
         System.out.println("--------------------------------");
-
+        System.out.println("Código: " + this.codigoPartido);
         System.out.println(seleccionLocal +
                 " vs " +
                 seleccionVisitante);
@@ -120,38 +136,19 @@ public class Partido {
         System.out.println("Ciudad: " + ciudad);
         System.out.println("Fase: " + fase);
 
-        System.out.println("\nZONAS");
+        System.out.println("\nZonas disponibles:");
 
-        for (Zona z : zonas) {
-
-            System.out.println(z);
-
-        }
-
+        System.out.println("- GENERAL        | Disponibles: " + entradasPorZona[0] + " | Precio: $"
+                + (int) (Math.random() * (1000)));
+        System.out.println("- PREFERENCIAL   | Disponibles: " + entradasPorZona[1] + " | Precio: $"
+                + (int) (Math.random() * (1000)));
+        System.out.println("- VIP            | Disponibles: " + entradasPorZona[2] + " | Precio: $"
+                + (int) (Math.random() * (1000)));
+        System.out.println("--------------------------------");
     }
 
-    public Zona buscarZona(TipoZona tipo) {
-
-        for (Zona zona : zonas) {
-
-            if (zona.getTipo() == tipo) {
-
-                return zona;
-
-            }
-
-        }
-
-        return null;
-    }
-
-    @Override
-    public String toString() {
-
-        return codigoPartido + " - "
-                + seleccionLocal + " vs "
-                + seleccionVisitante;
-
+    public String toString(){
+        return this.seleccionLocal + " vs " + this.seleccionVisitante;
     }
 
 }

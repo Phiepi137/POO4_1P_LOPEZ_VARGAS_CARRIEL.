@@ -1,69 +1,80 @@
 package com.example;
-//Clase Momentanea para manejar la lectura de archivos de texto plano
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ManejoArchivos {
+    public static ArrayList<String> LeeFichero(String nombrearchivo) {
+        ArrayList<String> lineas = new ArrayList<>();
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
 
-    public static ArrayList<Usuario> leerUsuarios(String ruta) {
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File(nombrearchivo);
+            fr = new FileReader(archivo,StandardCharsets.UTF_8);
+            br = new BufferedReader(fr);
 
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
-
+            // Lectura del fichero
             String linea;
-
             while ((linea = br.readLine()) != null) {
-
-                String[] datos = linea.split(";");
-
-                String codigo = datos[0];
-                String cedula = datos[1];
-                String nombres = datos[2];
-                String apellidos = datos[3];
-                String usuario = datos[4];
-                String contrasenia = datos[5];
-                String correo = datos[6];
-                String rol = datos[7];
-
-                if (rol.equals("A")) {
-
-                    usuarios.add(new Aficionado(
-                            codigo,
-                            cedula,
-                            nombres,
-                            apellidos,
-                            usuario,
-                            contrasenia,
-                            correo,
-                            "",          // celular
-                            ""           // país favorito
-                    ));
-
-                } else {
-
-                    usuarios.add(new Organizador(
-                            codigo,
-                            cedula,
-                            nombres,
-                            apellidos,
-                            usuario,
-                            contrasenia,
-                            correo,
-                            null,
-                            "",          // empresa
-                            ""           // cargo
-                    ));
-
-                }
+                System.out.println(linea);
+                lineas.add(linea);
 
             }
 
-        } catch (IOException e) {
-            System.out.println("Error al leer usuarios.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
+        return lineas;
 
-        return usuarios;
     }
+
+    public static void EscribirArchivo(String nombreArchivo, String linea) {
+
+        FileWriter fichero = null;
+        BufferedWriter bw = null;
+      
+        try {
+            fichero = new FileWriter(nombreArchivo,true);
+            bw = new BufferedWriter(fichero);
+            bw.write(linea+"\n");
+            System.out.println("ksdsdlsd");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Nuevamente aprovechamos el finally para 
+                // asegurarnos que se cierra el fichero.
+                if (null != fichero) {
+                    //fichero.close();
+                    bw.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
 
 }

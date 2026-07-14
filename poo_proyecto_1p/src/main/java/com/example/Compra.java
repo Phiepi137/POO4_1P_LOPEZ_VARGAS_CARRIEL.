@@ -9,12 +9,12 @@ public class Compra {
     // #region Variables de Instancia
     private String codigoCompra;
     private TipoCompra tipo;
-    private String codigoReferencia;
     private Date fecha;
     private int cantidad;
     private double valorPagado;
     private String codigoAficionado;
     private EstadoCompra estado;
+    private String codigoReferencia;
     // #endregion
 
     private static int numCompras = 0;
@@ -25,8 +25,26 @@ public class Compra {
         numCompras++;
         this.codigoCompra = "C" + numCompras;
         this.tipo = tipo;
-        this.codigoReferencia = codigoReferencia;
         this.fecha = new Date();
+        this.codigoReferencia = codigoReferencia;
+        this.cantidad = cantidad;
+        this.valorPagado = valorPagado;
+        this.codigoAficionado = codigoAficionado;
+        this.estado = estado;
+    }
+
+    public Compra(String codigoCompra,
+            TipoCompra tipo,
+            Date fecha,
+            int cantidad,
+            double valorPagado,
+            String codigoAficionado,
+            EstadoCompra estado) {
+
+        this.codigoCompra = codigoCompra;
+        this.tipo = tipo;
+        this.codigoCompra = "C" + numCompras;
+        this.fecha = fecha;
         this.cantidad = cantidad;
         this.valorPagado = valorPagado;
         this.codigoAficionado = codigoAficionado;
@@ -47,12 +65,8 @@ public class Compra {
         this.tipo = tipo;
     }
 
-    public String getCodigoReferencia() {
-        return codigoReferencia;
-    }
-
-    public void setCodigoReferencia(String codigoReferencia) {
-        this.codigoReferencia = codigoReferencia;
+    public void setCodigoCompra(String codigoCompra) {
+        this.codigoCompra = codigoCompra;
     }
 
     public Date getFecha() {
@@ -102,7 +116,7 @@ public class Compra {
 
         return "Código: " + codigoCompra +
                 "\nTipo: " + tipo +
-                "\nReferencia: " + codigoReferencia +
+                "\nReferencia: " + codigoCompra +
                 "\nFecha: " + fecha +
                 "\nCantidad: " + cantidad +
                 "\nValor pagado: $" + valorPagado +
