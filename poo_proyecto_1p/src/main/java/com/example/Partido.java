@@ -114,7 +114,7 @@ public class Partido {
         System.out.println(seleccionLocal +
                 " vs " +
                 seleccionVisitante);
-
+        System.out.println("Codigo: "+codigoPartido);
         System.out.println("Fecha: " + fecha);
         System.out.println("Estadio: " + estadio);
         System.out.println("Ciudad: " + ciudad);
