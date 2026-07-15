@@ -1,7 +1,7 @@
 package com.example;
 
 import com.example.enums.RolUsuario;
-import com.example.enums.EstadoCompra;
+// import com.example.enums.EstadoCompra;
 import com.example.enums.TipoCompra;
 import com.example.enums.TipoZona;
 import java.util.ArrayList;
@@ -53,9 +53,7 @@ public class Aficionado extends Usuario {
     public void consultarEntradas(ArrayList<Compra> compras) {
 
         System.out.println("\n========== MIS COMPRAS ==========");
-
         boolean encontro = false;
-
         for (Compra compra : compras) {
 
             if (compra.getCodigoAficionado().equals(getCodigo())) {
@@ -84,13 +82,13 @@ public class Aficionado extends Usuario {
 
     public Compra comprarEntradas(String codigo, TipoZona zona, int cantidad, String tarjeta) {
         double total = 0;
-        Compra c = new Compra(TipoCompra.ENTRADA, codigo, cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);
+        Compra c = new Compra(TipoCompra.ENTRADA, codigo, cantidad, total, this.getCodigo());
         return c;
     }
 
     public Compra comprarEntradas(String codigo, int cantidad, String tarjeta) {
         double total = 0;
-        Compra c = new Compra(TipoCompra.KIT, codigo, cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);
+        Compra c = new Compra(TipoCompra.KIT, codigo, cantidad, total, this.getCodigo());
         return c;
     }
 

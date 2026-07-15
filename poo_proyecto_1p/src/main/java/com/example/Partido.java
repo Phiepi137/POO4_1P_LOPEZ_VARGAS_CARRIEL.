@@ -131,17 +131,11 @@ public class Partido {
     }
 
     public Zona buscarZona(TipoZona tipo) {
-
         for (Zona zona : zonas) {
-
             if (zona.getTipo() == tipo) {
-
                 return zona;
-
             }
-
         }
-
         return null;
     }
 
