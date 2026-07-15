@@ -1,12 +1,15 @@
 package com.example;
 //Clase Momentanea para manejar la lectura de archivos de texto plano
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.example.enums.FasePartido;
+import com.example.enums.TipoCompra;
 import com.example.enums.TipoZona;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class ManejoArchivos {
     // Carga de archivos
@@ -133,6 +136,7 @@ public class ManejoArchivos {
         return partidos;
         
         
+        
     }
     // leer archivos de kits
     public static ArrayList<Kit> leerKits(String ruta, ArrayList<Partido> listaPartidos) {
@@ -166,9 +170,41 @@ public class ManejoArchivos {
         }
         return kits;
     }
-    // Descarga de archivos
+    // carga de compras realizadas
+    public static ArrayList<Compra> leerCompras(String ruta) {
+        ArrayList<Compra> compras = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            br.readLine(); // Saltar encabezado
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split("\\|");
+                String codigoCompra = datos[0];
+                TipoCompra tipo = TipoCompra.valueOf(datos[1].toUpperCase());
+                String codigoReferencia = datos[2];
+                Date fecha = sdf.parse(datos[3]);
+                int cantidad = Integer.parseInt(datos[4]);
+                double valorPagado = Double.parseDouble(datos[5]);
+                String codigoAficionado = datos[6];
+                Compra compra = new Compra(
+                    codigoCompra,
+                    tipo,
+                    codigoReferencia,
+                    fecha,
+                    cantidad,
+                    valorPagado,
+                    codigoAficionado
+                );
+                compras.add(compra);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al leer compras: " + e.getMessage());
+        }
+        return compras;
+    }
+    // Descarga de archivos compra
     public static void guardarCompra(Compra compra) {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter("compras.txt", true))) {
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/compras.txt", true))) {
         bw.write(compra.getCodigoCompra()+"|"+compra.getTipo()+"|"+compra.getCodigoReferencia()+"|"
                 +compra.getFecha()+"|"
                 +compra.getCantidad()+"|"
