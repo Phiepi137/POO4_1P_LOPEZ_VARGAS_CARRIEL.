@@ -3,6 +3,7 @@ package com.example;
 import java.util.ArrayList;
 
 import com.example.enums.RolUsuario;
+import com.example.enums.TipoCompra;
 
 public class Organizador extends Usuario {
 
@@ -57,22 +58,34 @@ public class Organizador extends Usuario {
     public void consultarEntradas(ArrayList<Compra> compras) {
         System.out.println("El organizador " + cargo + " de la empresa " + empresaOrganizadora
                 + " puede consultar las entradas vendidas.");
-
         System.out.println("\n========== TODAS LAS COMPRAS ==========");
-
         if (compras.size() == 0) {
-
             System.out.println("No existen compras registradas.");
             return;
-
         }
-
         for (Compra compra : compras) {
-
             System.out.println(compra);
-
         }
-
+    }
+    public void generarReporte(ArrayList<Compra> compras){
+        System.out.println("===== GENERAR REPORTE DE VENTAS =====");
+        System.out.println("Resumen de ventas registradas");
+        System.out.println("Total de compras: "+compras.size());
+        System.out.println("Compras por tipo:");
+        int montoKit=0;
+        int montoEntrada=0;
+        double montoTotal=0;
+        for(Compra c: compras){
+            montoTotal=montoTotal+c.getValorPagado();
+            if(c.getTipo()==TipoCompra.ENTRADA){
+                montoEntrada++;
+            }else{
+                montoKit++;
+            }
+        }
+        System.out.println("Entradas: "+montoEntrada);
+        System.out.println("Kits: "+montoKit);
+        System.out.println("Monto recaudado: "+montoTotal);
     }
 
     @Override
