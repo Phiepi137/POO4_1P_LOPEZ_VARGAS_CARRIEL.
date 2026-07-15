@@ -76,7 +76,7 @@ public class Kit {
     @Override
     public String toString() {
 
-        return "------------------\n"+codigoKit + " - " + nombre +
+        return codigoKit + " - " + nombre +
                 "\nDescripción: " + descripcion +
                 "\nPrecio: $" + precio +
                 "\nDisponibles: " + disponibles+"\n------------------";

@@ -23,7 +23,7 @@ public class Compra {
     public Compra(TipoCompra tipo, String codigoReferencia, int cantidad, double valorPagado, String codigoAficionado/* ,
             EstadoCompra estado*/) {
         numCompras++;
-        this.codigoCompra = "C" + numCompras;
+        this.codigoCompra = "C00" + numCompras;
         this.tipo = tipo;
         this.codigoReferencia = codigoReferencia;
         this.fecha = new Date();
@@ -46,6 +46,9 @@ public class Compra {
     // #endregion
 
     // #region getters y setter
+    public static void setNumCompras(int numCompras){
+        Compra.numCompras=numCompras;
+    }
     public String getCodigoCompra() {
         return codigoCompra;
     }
@@ -118,6 +121,6 @@ public class Compra {
                 "\nCantidad: " + cantidad +
                 "\nValor pagado: $" + valorPagado +
                 "\nEstado: EXITOSA" +
-                "\nCódigo aficionado: " + codigoAficionado;
+                "\nCódigo aficionado: " + codigoAficionado+"\n------------------------";
     }
 }

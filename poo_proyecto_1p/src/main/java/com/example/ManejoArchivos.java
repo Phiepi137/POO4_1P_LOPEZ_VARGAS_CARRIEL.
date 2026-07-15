@@ -200,13 +200,15 @@ public class ManejoArchivos {
         } catch (Exception e) {
             System.out.println("Error al leer compras: " + e.getMessage());
         }
+        Compra.setNumCompras(compras.size());
         return compras;
     }
     // Descarga de archivos compra
     public static void guardarCompra(Compra compra) {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/compras.txt", true))) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         bw.write(compra.getCodigoCompra()+"|"+compra.getTipo()+"|"+compra.getCodigoReferencia()+"|"
-                +compra.getFecha()+"|"
+                +sdf.format(compra.getFecha())+"|"
                 +compra.getCantidad()+"|"
                 +compra.getValorPagado()+"|"
                 +compra.getCodigoAficionado());

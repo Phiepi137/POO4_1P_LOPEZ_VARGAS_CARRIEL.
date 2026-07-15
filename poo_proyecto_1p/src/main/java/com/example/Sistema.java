@@ -11,6 +11,7 @@ public class Sistema {
     private ArrayList<Partido> partidos;
     private ArrayList<Kit> kits;
     private ArrayList<Compra> compras;
+    private ArrayList<Compra> comprasAf;
     private Scanner sc;
 
     public Sistema() {
@@ -18,6 +19,7 @@ public class Sistema {
         partidos = new ArrayList<>();
         kits = new ArrayList<>();
         compras = new ArrayList<>();
+        comprasAf = new ArrayList<>();
         sc = new Scanner(System.in);
     }
 
@@ -124,7 +126,7 @@ public class Sistema {
                         mostrarPartidos();
                         break;
                     case 2:
-                        e.consultarEntradas(compras);
+                        e.consultarEntradas(comprasAf);
                         break;
                     case 3:
                         crearCompra(e);
@@ -222,7 +224,7 @@ public class Sistema {
     //
     // Sobrecarga de metodos notificar
     public void notificar(Aficionado aficionado, Compra compra) {
-        System.out.println("\n===== NOTIFICACIÓN =====");
+        System.out.println("-----------------\n===== NOTIFICACIÓN =====");
         System.out.println("Para: " + aficionado.getCorreo());
         System.out.println("Estimado(a) " + aficionado.getNombreCompleto());
         System.out.println("Su compra se realizó exitosamente.");
@@ -233,7 +235,7 @@ public class Sistema {
 
     public void notificar(Kit kit, Aficionado aficionado, Compra compra) {
 
-        System.out.println("\n===== NOTIFICACIÓN =====");
+        System.out.println("-----------------\n===== NOTIFICACIÓN =====");
         System.out.println("Para: " + aficionado.getCorreo());
         System.out.println("Estimado(a) " + aficionado.getNombreCompleto());
         System.out.println("Ha comprado el kit: " + kit.getNombre());
@@ -246,7 +248,7 @@ public class Sistema {
     }
 
     public void notificar(Organizador organizador, Reporte reporte) {
-        System.out.println("\n===== REPORTE =====");
+        System.out.println("-----------------\n===== REPORTE =====");
         System.out.println("Para: " + organizador.getCorreo());
         System.out.println("Organizador: " + organizador.getNombreCompleto());
 
@@ -321,15 +323,16 @@ public class Sistema {
                 System.out.print("Ingrese el número de tarjeta: ");
                 String tarjeta = sc.nextLine();
                 Compra compra = a.comprarEntradas(p.getCodigoPartido(), z.getTipo(), cantidad, tarjeta);
-                if (compra != null) { // ver q es esto
-                    compras.add(compra);
+                if (compra != null) { 
+                    comprasAf.add(compra); // este arraylist solo lo ve el aficionado
+                    compras.add(compra); // este arraylist lo ve el organizador
                     // Descontar entradas disponibles
                     z.setDisponible(z.getDisponible() - cantidad);
+                    compra.setValorPagado(cantidad*z.getPrecio());
                     mostrarPrecio(compra);
                     notificar(a, compra);
                     // guardamos la compra entrada
                     ManejoArchivos.guardarCompra(compra);
-                    compra.setValorPagado(cantidad*z.getPrecio());
                     System.out.println("Compra realizada exitosamente.");
                 }
 
@@ -352,7 +355,7 @@ public class Sistema {
                 }
 
                 int cantidadKit;
-                while (true) { // ver
+                while (true) {
                     System.out.print("Cantidad de Kit: ");
                     cantidadKit = sc.nextInt();
                     sc.nextLine();
@@ -369,14 +372,15 @@ public class Sistema {
                 String tarjetaKit = sc.nextLine();
                 Compra compraKit = a.comprarEntradas(kit.getCodigoKit(), cantidadKit, tarjetaKit);
                 if (compraKit != null) {
-                    compras.add(compraKit);
+                    comprasAf.add(compraKit); // este arraylist solo lo ve el aficionado
+                    compras.add(compraKit); // este arraylist solo lo ve el organizador
                     kit.setDisponibles(kit.getDisponibles() - cantidadKit);
+                    compraKit.setValorPagado(cantidadKit*kit.getPrecio());
                     mostrarPrecio(compraKit);
                     notificar(kit, a, compraKit);
                     System.out.println("Compra realizada exitosamente.");
                     // guardamos la compra kit
-                    ManejoArchivos.guardarCompra(compraKit);
-                    compraKit.setValorPagado(cantidadKit*kit.getPrecio());
+                    ManejoArchivos.guardarCompra(compraKit); 
                 }
                 break;
 
