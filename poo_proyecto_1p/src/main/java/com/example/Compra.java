@@ -20,8 +20,8 @@ public class Compra {
     private static int numCompras = 0;
 
     // #region Constructor
-    public Compra(TipoCompra tipo, String codigoReferencia, int cantidad, double valorPagado, String codigoAficionado,
-            EstadoCompra estado) {
+    public Compra(TipoCompra tipo, String codigoReferencia, int cantidad, double valorPagado, String codigoAficionado/* ,
+            EstadoCompra estado*/) {
         numCompras++;
         this.codigoCompra = "C" + numCompras;
         this.tipo = tipo;
@@ -30,8 +30,19 @@ public class Compra {
         this.cantidad = cantidad;
         this.valorPagado = valorPagado;
         this.codigoAficionado = codigoAficionado;
-        this.estado = estado;
+        //this.estado = estado;
     }
+    // Sobrecarga de constructor para lectura de compras.txt
+    public Compra(String codigoCompra, TipoCompra tipo, String codigoReferencia,
+        Date fecha, int cantidad, double valorPagado, String codigoAficionado) {
+        this.codigoCompra = codigoCompra;
+        this.tipo = tipo;
+        this.codigoReferencia = codigoReferencia;
+        this.fecha = fecha;
+        this.cantidad = cantidad;
+        this.valorPagado = valorPagado;
+        this.codigoAficionado = codigoAficionado;
+}
     // #endregion
 
     // #region getters y setter
@@ -106,7 +117,7 @@ public class Compra {
                 "\nFecha: " + fecha +
                 "\nCantidad: " + cantidad +
                 "\nValor pagado: $" + valorPagado +
-                "\nEstado: " + estado +
+                "\nEstado: EXITOSA" +
                 "\nCódigo aficionado: " + codigoAficionado;
     }
 }
