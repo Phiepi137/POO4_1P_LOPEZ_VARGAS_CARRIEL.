@@ -167,4 +167,16 @@ public class ManejoArchivos {
         return kits;
     }
     // Descarga de archivos
+    public static void guardarCompra(Compra compra) {
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("compras.txt", true))) {
+        bw.write(compra.getCodigoCompra()+"|"+compra.getTipo()+"|"+compra.getCodigoReferencia()+"|"
+                +compra.getFecha()+"|"
+                +compra.getCantidad()+"|"
+                +compra.getValorPagado()+"|"
+                +compra.getCodigoAficionado());
+        bw.newLine();
+    }catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 }
