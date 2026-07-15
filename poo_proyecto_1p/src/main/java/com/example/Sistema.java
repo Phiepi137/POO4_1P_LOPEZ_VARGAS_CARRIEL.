@@ -223,28 +223,29 @@ public class Sistema {
 
     //
     // Sobrecarga de metodos notificar
-    public void notificar(Aficionado aficionado, Compra compra) {
-        System.out.println("-----------------\n===== NOTIFICACIÓN =====");
-        System.out.println("Para: " + aficionado.getCorreo());
-        System.out.println("Estimado(a) " + aficionado.getNombreCompleto());
-        System.out.println("Su compra se realizó exitosamente.");
-        System.out.println("Código de compra: " + compra.getCodigoReferencia());
-        System.out.println("Valor pagado: $" + compra.getValorPagado());
-        System.out.println("========================\n");
+    public String notificar(Aficionado aficionado, Compra compra) {
+        String mensaje = "-----------------\n"
+        + "===== NOTIFICACIÓN =====\n"
+        + "Para: " + aficionado.getCorreo() + "\n"
+        + "Estimado(a) " + aficionado.getNombreCompleto() + "\n"
+        + "Su compra se realizó exitosamente.\n"
+        + "Código de compra: " + compra.getCodigoReferencia() + "\n"
+        + "Valor pagado: $" + compra.getValorPagado() + "\n"
+        + "========================";
+        return mensaje;
     }
 
-    public void notificar(Kit kit, Aficionado aficionado, Compra compra) {
-
-        System.out.println("-----------------\n===== NOTIFICACIÓN =====");
-        System.out.println("Para: " + aficionado.getCorreo());
-        System.out.println("Estimado(a) " + aficionado.getNombreCompleto());
-        System.out.println("Ha comprado el kit: " + kit.getNombre());
-        System.out.println("Descripción: " + kit.getDescripcion());
-        System.out.println("Código de compra: " + compra.getCodigoReferencia());
-
-        System.out.println("Valor pagado: $" + compra.getValorPagado());
-        System.out.println("========================\n");
-
+    public String notificar(Kit kit, Aficionado aficionado, Compra compra) {
+        String mensaje = "-----------------\n"
+        + "===== NOTIFICACIÓN =====\n"
+        + "Para: " + aficionado.getCorreo() + "\n"
+        + "Estimado(a) " + aficionado.getNombreCompleto() + "\n"
+        + "Ha comprado el kit: " + kit.getNombre() + "\n"
+        + "Descripción: " + kit.getDescripcion() + "\n"
+        + "Código de compra: " + compra.getCodigoReferencia() + "\n"
+        + "Valor pagado: $" + compra.getValorPagado() + "\n"
+        + "========================";
+        return mensaje;
     }
 
     public void notificar(Organizador organizador, Reporte reporte) {
@@ -328,10 +329,14 @@ public class Sistema {
                     compras.add(compra); // este arraylist lo ve el organizador
                     // Descontar entradas disponibles
                     z.setDisponible(z.getDisponible() - cantidad);
+                    p.setCapacidad(p.getCapacidad()-cantidad);
+                    z.setDisponible(z.getDisponible()-cantidad);
                     compra.setValorPagado(cantidad*z.getPrecio());
                     mostrarPrecio(compra);
                     notificar(a, compra);
                     // guardamos la compra entrada
+                    String destinario=a.getCorreo();
+                    EnviarCorreo.enviar(destinario,"RECIBO DE COMPRA",notificar(a, compra));
                     ManejoArchivos.guardarCompra(compra);
                     System.out.println("Compra realizada exitosamente.");
                 }
@@ -379,6 +384,8 @@ public class Sistema {
                     mostrarPrecio(compraKit);
                     notificar(kit, a, compraKit);
                     System.out.println("Compra realizada exitosamente.");
+                    String destinario=a.getCorreo();
+                    EnviarCorreo.enviar(destinario,"RECIBO DE COMPRA",notificar(kit,a, compraKit));
                     // guardamos la compra kit
                     ManejoArchivos.guardarCompra(compraKit); 
                 }
