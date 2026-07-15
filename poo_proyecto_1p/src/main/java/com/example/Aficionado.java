@@ -90,7 +90,7 @@ public class Aficionado extends Usuario {
 
     public Compra comprarEntradas(String codigo, int cantidad, String tarjeta) {
         double total = 0;
-        Compra c = new Compra(TipoCompra.ENTRADA, codigo, cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);
+        Compra c = new Compra(TipoCompra.KIT, codigo, cantidad, total, this.getCodigo(), EstadoCompra.EXITOSA);
         return c;
     }
 
