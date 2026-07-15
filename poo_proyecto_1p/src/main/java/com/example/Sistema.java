@@ -29,8 +29,9 @@ public class Sistema {
         ManejoArchivos.leerOrganizadores("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/organizadores.txt", usuarios);
         partidos = ManejoArchivos.leerPartidos("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/partidos.txt");
         kits = ManejoArchivos.leerKits("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/kits.txt", partidos);
-System.out.println("Partidos cargados: " + partidos.size());
-System.out.println("Kits cargados: " + kits.size());
+        compras = ManejoArchivos.leerCompras("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/compras.txt");
+        // System.out.println("Partidos cargados: " + partidos.size());
+        // System.out.println("Kits cargados: " + kits.size());
     }
 
     public void iniciarSesion() {
@@ -54,7 +55,7 @@ System.out.println("Kits cargados: " + kits.size());
     }
 
     public Usuario autenticar(String usuario, String contraseña) {
-        for (Usuario e : usuarios) {
+        for (Usuario e : usuarios){
             if (e.autenticar(usuario, contraseña)) {
                 return e;
             }
@@ -142,6 +143,7 @@ System.out.println("Kits cargados: " + kits.size());
                 }
             }
         } else {
+            // en caso de que usuario sea organizador
             boolean salir = false;
             Organizador or = (Organizador) usuario;
             while (!salir) {
@@ -275,7 +277,7 @@ System.out.println("Kits cargados: " + kits.size());
                 // Verificar si existe la zona
                 Zona z = null;
                 while (z == null) {
-                    System.out.println("Escoja zona\n1. General\n2. Preferencia\n3. VIP");
+                    System.out.println("Escoja zona\n1. General\n2. Preferencial\n3. VIP");
                     int zona = sc.nextInt();
                     sc.nextLine();
                     TipoZona tipo = null;
@@ -319,12 +321,14 @@ System.out.println("Kits cargados: " + kits.size());
                 System.out.print("Ingrese el número de tarjeta: ");
                 String tarjeta = sc.nextLine();
                 Compra compra = a.comprarEntradas(p.getCodigoPartido(), z.getTipo(), cantidad, tarjeta);
-                if (compra != null) {
+                if (compra != null) { // ver q es esto
                     compras.add(compra);
                     // Descontar entradas disponibles
                     z.setDisponible(z.getDisponible() - cantidad);
                     mostrarPrecio(compra);
                     notificar(a, compra);
+                    // guardamos la compra entrada
+                    ManejoArchivos.guardarCompra(compra);
                     compra.setValorPagado(cantidad*z.getPrecio());
                     System.out.println("Compra realizada exitosamente.");
                 }
@@ -348,7 +352,7 @@ System.out.println("Kits cargados: " + kits.size());
                 }
 
                 int cantidadKit;
-                while (true) {
+                while (true) { // ver
                     System.out.print("Cantidad de Kit: ");
                     cantidadKit = sc.nextInt();
                     sc.nextLine();
@@ -370,6 +374,8 @@ System.out.println("Kits cargados: " + kits.size());
                     mostrarPrecio(compraKit);
                     notificar(kit, a, compraKit);
                     System.out.println("Compra realizada exitosamente.");
+                    // guardamos la compra kit
+                    ManejoArchivos.guardarCompra(compraKit);
                     compraKit.setValorPagado(cantidadKit*kit.getPrecio());
                 }
                 break;
