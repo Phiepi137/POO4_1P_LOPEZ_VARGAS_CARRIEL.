@@ -83,9 +83,11 @@ public class Organizador extends Usuario {
                 montoKit++;
             }
         }
+        double montoTotal= montoKit+montoEntrada;
         System.out.println("Entradas: "+montoEntrada);
         System.out.println("Kits: "+montoKit);
         System.out.println("Monto recaudado: "+montoTotal);
+
     }
 
     @Override
