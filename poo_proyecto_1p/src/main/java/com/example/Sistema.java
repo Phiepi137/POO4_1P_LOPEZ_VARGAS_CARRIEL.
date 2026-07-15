@@ -24,11 +24,11 @@ public class Sistema {
     // Leer Archivos
     public void cargarDatos() {
 
-        usuarios = ManejoArchivos.leerUsuarios("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/usuarios.txt");
-        ManejoArchivos.leerAficionados("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/aficionados.txt",usuarios);
-        ManejoArchivos.leerOrganizadores("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/organizadores.txt", usuarios);
-        partidos = ManejoArchivos.leerPartidos("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/partidos.txt");
-        kits = ManejoArchivos.leerKits("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/main/java/com/example/archivos/kits.txt", partidos);
+        usuarios = ManejoArchivos.leerUsuarios("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/usuarios.txt");
+        ManejoArchivos.leerAficionados("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/aficionados.txt",usuarios);
+        ManejoArchivos.leerOrganizadores("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/organizadores.txt", usuarios);
+        partidos = ManejoArchivos.leerPartidos("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/partidos.txt");
+        kits = ManejoArchivos.leerKits("/workspaces/POO4_1P_LOPEZ_VARGAS_CARRIEL./poo_proyecto_1p/src/resources/kits.txt", partidos);
 System.out.println("Partidos cargados: " + partidos.size());
 System.out.println("Kits cargados: " + kits.size());
     }

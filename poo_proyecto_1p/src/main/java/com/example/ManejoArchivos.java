@@ -9,7 +9,7 @@ import com.example.enums.TipoZona;
 import java.time.LocalDate;
 
 public class ManejoArchivos {
-
+    // Carga de archivos
     public static ArrayList<Usuario> leerUsuarios(String ruta) {
 
         ArrayList<Usuario> usuarios = new ArrayList<>();
@@ -166,4 +166,5 @@ public class ManejoArchivos {
         }
         return kits;
     }
+    // Descarga de archivos
 }
