@@ -112,7 +112,6 @@ System.out.println("Kits cargados: " + kits.size());
         if (usuario instanceof Aficionado) {
             boolean salir = false;
             Aficionado e = (Aficionado) usuario;
-            
             while (!salir) {
                 try{
                 System.out.println("\n1. Consultar partidos\n2. Consultar mis entradas\n3. Comprar entradas\n4. Salir");
@@ -132,6 +131,7 @@ System.out.println("Kits cargados: " + kits.size());
                     case 4:
                         System.out.println("Cerrando sistema...");
                         salir = true;
+                        iniciarSesion();
                         break;
                     default:
                         System.out.println("Opción incorrecta. Intente nuevamente.");
@@ -142,9 +142,34 @@ System.out.println("Kits cargados: " + kits.size());
                 }
             }
         } else {
-            System.out.println("1. Consultar reportes\n2. Consultar entradas");
+            boolean salir = false;
+            Organizador or = (Organizador) usuario;
+            while (!salir) {
+            try{
+            System.out.println("1. Consultar entradas\n2. Generar reportes\n3. Salir");
+            int opcion = sc.nextInt();
+                sc.nextLine();
+                switch (opcion) {
+                    case 1:
+                        or.consultarEntradas(compras);
+                        break;
+                    case 2:
+                        or.generarReporte(compras);
+                        break;
+                    case 3:
+                        System.out.println("Cerrando sistema...");
+                        salir = true;
+                        iniciarSesion();
+                        break;
+                    default:
+                        System.out.println("Opción incorrecta. Intente nuevamente.");
+                }
+                }catch(Exception ex1){
+                    System.out.println("Debe ingresar un número válido.");
+                    sc.nextLine();
+                }
+                 }
         }
-
     }
 
     public void mostrarKitDisp() {
