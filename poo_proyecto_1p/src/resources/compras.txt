@@ -1,0 +1,4 @@
+CodigoCompra|Tipo|CodigoReferencia|FechaCompra|Cantidad|ValorPagado|CodigoAficionado
+C001|ENTRADA|M001|2026-06-01|2|300.00|A001
+C002|KIT|K001|2026-06-02|1|250.00|A001
+C003|ENTRADA|M002|2026-06-03|4|720.00|A002
