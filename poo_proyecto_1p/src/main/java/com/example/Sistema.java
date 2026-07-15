@@ -330,7 +330,6 @@ public class Sistema {
                     // Descontar entradas disponibles
                     z.setDisponible(z.getDisponible() - cantidad);
                     p.setCapacidad(p.getCapacidad()-cantidad);
-                    z.setDisponible(z.getDisponible()-cantidad);
                     compra.setValorPagado(cantidad*z.getPrecio());
                     mostrarPrecio(compra);
                     notificar(a, compra);
